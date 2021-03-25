@@ -18,11 +18,10 @@ class MySQLJob:
 
     def connect_mysql(self):
         engine = sa.create_engine(
-            "mysql+pymysql://{uid}:{pwd}@{host}/{db}".format(
+            "mysql+pymysql://{uid}:{pwd}@{host}".format(
                 uid=os.getenv("MYSQL_UID"),
                 pwd=os.getenv("MYSQL_PWD"),
-                host=os.getenv("MYSQL_SERVER"),
-                db=os.getenv('MYSQL_DB')
+                host=os.getenv("MYSQL_SERVER")
             )
         )
         return engine.raw_connection()
