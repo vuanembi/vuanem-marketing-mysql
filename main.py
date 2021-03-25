@@ -17,11 +17,14 @@ class MySQLJob:
         self.dataset = "Ecom"
 
     def connect_mysql(self):
+        print(os.getenv("MYSQL_UID"),)
+        print(os.getenv("MYSQL_PWD"),)
+        print(os.getenv("MYSQL_SERVER"),)
         engine = sa.create_engine(
             "mysql+pymysql://{uid}:{pwd}@{host}".format(
                 uid=os.getenv("MYSQL_UID"),
                 pwd=os.getenv("MYSQL_PWD"),
-                host=os.getenv("MYSQL_SERVER")
+                host=os.getenv("MYSQL_SERVER"),
             )
         )
         return engine.raw_connection()
@@ -80,15 +83,15 @@ def main(request):
         "CallLogs",
         timestamp_cols=["start_time", "end_time", "created_at", "updated_at"],
     )
-
+    """
     loom = ThreadLoom(max_runner_cap=10)
     for i in [SalesCall, CallLogs]:
         loom.add_function(i.run)
     results = loom.execute()
-
+    """
     responses = {
         "pipelines": "MySQL",
-        "results": [i["output"] for i in results.values()],
+        "results": [SalesCall.run(), CallLogs.run()],
     }
 
     print(responses)

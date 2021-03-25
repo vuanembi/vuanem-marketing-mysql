@@ -29,9 +29,4 @@ jobs:
         --trigger-http
         --project=${{ secrets.PROJECT_ID }}
         --service-account=${{ secrets.GCP_SA }}
-        --set-env-vars=\
-        MYSQL_UID=${{ secrets.MYSQL_UID }},\
-        MYSQL_PWD=${{ secrets.MYSQL_PWD }},\
-        MYSQL_SERVER=${{ secrets.MYSQL_SERVER }},\
-        TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},\
-        TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+        --set-env-vars=MYSQL_UID=${{ secrets.MYSQL_UID }},MYSQL_PWD=${{ secrets.MYSQL_PWD }},MYSQL_SERVER=${{ secrets.MYSQL_SERVER }},TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
