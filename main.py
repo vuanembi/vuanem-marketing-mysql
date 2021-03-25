@@ -83,15 +83,14 @@ def main(request):
         "CallLogs",
         timestamp_cols=["start_time", "end_time", "created_at", "updated_at"],
     )
-    """
     loom = ThreadLoom(max_runner_cap=10)
     for i in [SalesCall, CallLogs]:
         loom.add_function(i.run)
     results = loom.execute()
-    """
+    
     responses = {
         "pipelines": "MySQL",
-        "results": [SalesCall.run(), CallLogs.run()],
+        "results": [i["output"] for i in results.values()],
     }
 
     print(responses)

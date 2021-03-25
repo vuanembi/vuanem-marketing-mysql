@@ -24,6 +24,7 @@ jobs:
     - name: Deploy to Cloud Functions
       run: >-
         gcloud functions deploy ${{ env.NAME }}
+        --timeout=180
         --entry-point=main
         --runtime=python38
         --trigger-http
