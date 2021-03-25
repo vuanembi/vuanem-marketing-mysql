@@ -33,5 +33,6 @@ jobs:
         MYSQL_UID=${{ secrets.MYSQL_UID }},\
         MYSQL_PWD=${{ secrets.MYSQL_PWD }},\
         MYSQL_SERVER=${{ secrets.MYSQL_SERVER }},\
+        MYSQL_DB=${{ secrets.MYSQL_DB }},\
         TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},\
         TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
