@@ -25,6 +25,7 @@ jobs:
       run: >-
         gcloud functions deploy ${{ env.NAME }}
         --timeout=180
+        --memory=1024MB
         --entry-point=main
         --runtime=python38
         --trigger-http

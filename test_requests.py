@@ -1,4 +1,3 @@
-import requests
 from main import main
 
 def test_requests():

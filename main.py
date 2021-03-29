@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from datetime import datetime
 
@@ -17,9 +18,6 @@ class MySQLJob:
         self.dataset = "Ecom"
 
     def connect_mysql(self):
-        print(os.getenv("MYSQL_UID"),)
-        print(os.getenv("MYSQL_PWD"),)
-        print(os.getenv("MYSQL_SERVER"),)
         engine = sa.create_engine(
             "mysql+pymysql://{uid}:{pwd}@{host}".format(
                 uid=os.getenv("MYSQL_UID"),
@@ -36,7 +34,12 @@ class MySQLJob:
             query = f.read()
         cursor.execute(query)
         columns = [column[0] for column in cursor.description]
-        rows = [dict(zip(columns, result)) for result in tqdm(cursor.fetchall())]
+        rows = []
+        while True:
+            results = cursor.fetchmany(10000)
+            if not results:
+                break
+            rows.extend([dict(zip(columns, result)) for result in tqdm(results)])
         self.num_processed = len(rows)
         return rows
 
@@ -87,7 +90,7 @@ def main(request):
     for i in [SalesCall, CallLogs]:
         loom.add_function(i.run)
     results = loom.execute()
-    
+
     responses = {
         "pipelines": "MySQL",
         "results": [i["output"] for i in results.values()],
