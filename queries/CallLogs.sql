@@ -2,6 +2,7 @@ SELECT
     call_id,
     customer_id,
     ticket_id,
+    agent_id,
     caller,
     call_type,
     call_status,

@@ -16,6 +16,11 @@
     },
     {
         "mode": "NULLABLE",
+        "name": "agent_id",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
         "name": "caller",
         "type": "STRING"
     },
