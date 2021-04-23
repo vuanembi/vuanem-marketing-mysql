@@ -15,7 +15,7 @@ class MySQLJob:
         self.table = table
         self.date_cols = kwargs.get("date_cols", None)
         self.timestamp_cols = kwargs.get("timestamp_cols", None)
-        self.dataset = "Ecom"
+        self.dataset = "C2Leads"
 
     def connect_mysql(self):
         engine = sa.create_engine(
@@ -81,9 +81,9 @@ class MySQLJob:
 
 
 def main(request):
-    SalesCall = MySQLJob("SalesCall", timestamp_cols=["dt"])
+    SalesCall = MySQLJob("c2l_SalesCall", timestamp_cols=["dt"])
     CallLogs = MySQLJob(
-        "CallLogs",
+        "c2c_CaresoftCallLogs",
         timestamp_cols=["start_time", "end_time", "created_at", "updated_at"],
     )
     loom = ThreadLoom(max_runner_cap=10)
