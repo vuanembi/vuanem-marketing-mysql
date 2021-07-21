@@ -4,10 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-dotenv = "*"
 google-cloud-bigquery = "*"
 requests = "*"
-tqdm = "*"
 sqlalchemy = "*"
 parallel-execute = "*"
 pymysql = "*"
@@ -15,8 +13,6 @@ pymysql = "*"
 [dev-packages]
 black = "*"
 pytest = "*"
-functions-framework = "*"
-pytest-dotenv = "*"
 
 [requires]
 python_version = "3.8"
