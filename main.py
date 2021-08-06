@@ -1,36 +1,31 @@
 import os
 import json
+import base64
 
 import requests
-from pexecute.thread import ThreadLoom
 
 from models import MySQL
-
+from broadcast import broadcast
 
 def main(request):
-    """API Gateway
+    request_json = request.get_json()
+    message = request_json["message"]
+    data_bytes = message["data"]
+    data = json.loads(base64.b64decode(data_bytes).decode("utf-8"))
+    print(data)
 
-    Args:
-        request (flask.Request): HTTP request
-
-    Returns:
-        dict: Responses
-    """
-        
-    SalesCall = MySQL("c2l_SalesCall")
-    CallLogs = MySQL("c2c_CaresoftCallLogs")
-    loom = ThreadLoom(max_runner_cap=10)
-    for i in [SalesCall, CallLogs]:
-        loom.add_function(i.run)
-    output = loom.execute()
+    if "broadcast" in data:
+        results = broadcast(data)
+    elif "table" in data:
+        job = MySQL.factory(data["table"])
+        results = job.run()
 
     responses = {
         "pipelines": "MySQL",
-        "results": [i["output"] for i in output.values()],
+        "results": results,
     }
 
     print(responses)
-
     requests.post(
         "https://api.telegram.org/bot{token}/sendMessage".format(
             token=os.getenv("TELEGRAM_TOKEN")

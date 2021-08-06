@@ -1,109 +1,88 @@
 import os
 import json
 from urllib.parse import quote
+from abc import ABC
 
+import pytz
 import sqlalchemy as sa
 from google.cloud import bigquery
 
+TZ = pytz.timezone("Asia/Saigon")
+
+DATASET = "Ecom"
 
 BQ_CLIENT = bigquery.Client()
-DATASET = "C2Leads"
 
 
-class MySQL:
-    def __init__(self, table):
-        """Initialize instance
-
-        Args:
-            table (str): Table name
-        """
-
-        self.table = table
-        self.fields, self.schema = self.get_config()
-
-    def get_config(self):
-        """Get config from JSON
-
-        Returns:
-            tuple: (fields, schema))
-        """
-
-        with open(f"configs/{self.table}.json", 'r') as f:
-            config = json.load(f)
-        return config['fields'], config['schema']
-
-    def get_cursor(self):
-        """Get DB-API cursor
-
-        Returns:
-            pymysql.cursors.Cursor: Cursor
-        """        
-
-        engine = sa.create_engine(
-            "mysql+pymysql://{uid}:{pwd}@{host}/{db}".format(
-                uid=os.getenv("MYSQL_UID"),
-                pwd=quote(os.getenv("MYSQL_PWD")),
-                host=os.getenv("MYSQL_SERVER"),
-                db=os.getenv("MYSQL_DB")
-            )
-        )
+class Cursor(ABC):
+    def get_cursor(self, uid, pwd, host, db):
+        engine = sa.create_engine(f"mysql+pymysql://{uid}:{pwd}@{host}/{db}")
         return engine.raw_connection().cursor()
 
-    def get(self):
-        """Get data from MySQL
 
-        Returns:
-            list: List of results
-        """
+class MagentoCursor(Cursor):
+    def get_cursor(self):
+        return super().get_cursor(
+            quote(os.getenv("M_MYSQL_UID")),
+            quote(os.getenv("M_MYSQL_PWD")),
+            quote(os.getenv("M_MYSQL_HOST")),
+            quote(os.getenv("M_MYSQL_DB")),
+        )
 
-        cursor = self.get_cursor()
-        query = self._get_query()
-        cursor.execute(query)
+
+class LaravelCursor(Cursor):
+    def get_cursor(self):
+        return super().get_cursor(
+            quote(os.getenv("L_MYSQL_UID")),
+            quote(os.getenv("L_MYSQL_PWD")),
+            quote(os.getenv("L_MYSQL_HOST")),
+            quote(os.getenv("L_MYSQL_DB")),
+        )
+
+
+class MySQL(ABC):
+    def __init__(self):
+        self.query, self.fields, self.schema = self.get_config()
+
+    @staticmethod
+    def factory(table):
+        if table == "SalesCall":
+            return SalesCall()
+        elif table == "CallLogs":
+            return CallLogs()
+        elif table == "Orders":
+            return Orders()
+        else:
+            raise NotImplementedError(table)
+
+    def get_config(self):
+        with open(f"configs/{self.table}.json", "r") as c, open(
+            f"queries/{self.table}.sql"
+        ) as q:
+            config = json.load(c)
+            query = q.read()
+        return query, config["fields"], config["schema"]
+
+    def get(self, cursor):
+        cursor.execute(self.query)
         columns = [column[0] for column in cursor.description]
-        rows = []
-        while True:
-            results = cursor.fetchmany(10000)
-            if not results:
-                break
-            rows.extend([dict(zip(columns, result)) for result in results])
+        rows = [dict(zip(columns, result)) for result in cursor.fetchall()]
         return rows
 
-    def _get_query(self):
-        with open(f"queries/{self.table}.sql") as f:
-            return f.read()
-
-    def transform(self, rows):
-        """Transform results
-
-        Args:
-            rows (list): List of results
-
-        Returns:
-            list: List of results
-        """
-
-        for row in rows:
-            if self.fields.get('date'):
-                for col in self.fields.get('date'):
-                    row[col] = row[col].strftime("%Y-%m-%d")
-            if self.fields.get('timestamp'):
-                for col in self.fields.get('timestamp'):
-                    row[col] = row[col].strftime("%Y-%m-%d %H:%M:%S")
+    def transform(self, _rows):
+        rows = [self._transform_type(row) for row in _rows]
         return rows
+
+    def _transform_type(self, row):
+        if self.fields.get("timestamp"):
+            for i in self.fields["timestamp"]:
+                row[i] = TZ.localize(row[i]).isoformat(timespec="seconds")
+        return row
 
     def load(self, rows):
-        """Load to 
-
-        Args:
-            rows (list): List of results
-
-        Returns:
-            google.cloud.bigquery.job.load.LoadJob: Loads results
-        """    
-
         return BQ_CLIENT.load_table_from_json(
             rows,
-            f"{DATASET}._stage_{self.table}",
+            f"{DATASET}.{self.table}",
             job_config=bigquery.LoadJobConfig(
                 schema=self.schema,
                 create_disposition="CREATE_IF_NEEDED",
@@ -112,13 +91,8 @@ class MySQL:
         ).result()
 
     def run(self):
-        """Main run function
-
-        Returns:
-            dict: Job results
-        """
-                
-        rows = self.get()
+        cursor = self.cursor.get_cursor()
+        rows = self.get(cursor)
         responses = {
             "table": self.table,
             "num_processed": len(rows),
@@ -126,5 +100,29 @@ class MySQL:
         if len(rows) > 0:
             rows = self.transform(rows)
             loads = self.load(rows)
-            responses['output_rows'] = loads.output_rows
+            responses["output_rows"] = loads.output_rows
         return responses
+
+
+class SalesCall(MySQL):
+    table = "SalesCall"
+
+    def __init__(self):
+        super().__init__()
+        self.cursor = MagentoCursor()
+
+
+class CallLogs(MySQL):
+    table = "CallLogs"
+
+    def __init__(self):
+        super().__init__()
+        self.cursor = MagentoCursor()
+
+
+class Orders(MySQL):
+    table = "Orders"
+
+    def __init__(self):
+        super().__init__()
+        self.cursor = LaravelCursor()

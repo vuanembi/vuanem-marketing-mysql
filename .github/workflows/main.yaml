@@ -1,34 +1,34 @@
-name: deploy
+name: CI/CD
 on:
   push:
     branches: [master]
   workflow_dispatch:
 
 env:
-  NAME: vuanem_mysql
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  FUNCTION_NAME: vuanem_mysql
+  TOPIC_ID: vuanem_mysql
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.2.0
-      with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
 
-    - name: Deploy to Cloud Functions
-      run: >-
-        gcloud functions deploy ${{ env.NAME }}
-        --timeout=180
-        --memory=1024MB
-        --entry-point=main
-        --runtime=python38
-        --trigger-http
-        --project=${{ secrets.PROJECT_ID }}
-        --service-account=${{ secrets.GCP_SA }}
-        --set-env-vars=MYSQL_UID=${{ secrets.MYSQL_UID }},MYSQL_PWD=${{ secrets.MYSQL_PWD }},MYSQL_SERVER=${{ secrets.MYSQL_SERVER }},TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Deploy to Cloud Functions
+        run: >-
+          gcloud functions deploy ${{ env.FUNCTION_NAME }}
+          --timeout=540
+          --memory=2048MB
+          --entry-point=main
+          --runtime=python38
+          --trigger-http
+          --project=${{ secrets.PROJECT_ID }}
+          --service-account=${{ secrets.GCP_SA }}
+          --set-env-vars=M_MYSQL_UID=${{ secrets.M_MYSQL_UID }},M_MYSQL_PWD=${{ secrets.M_MYSQL_PWD }},M_MYSQL_HOST=${{ secrets.M_MYSQL_HOST }},M_MYSQL_DB=${{ secrets.M_MYSQL_DB }},L_MYSQL_UID=${{ secrets.L_MYSQL_UID }},L_MYSQL_PWD="${{ secrets.L_MYSQL_PWD }}",L_MYSQL_HOST=${{ secrets.L_MYSQL_HOST }},L_MYSQL_DB=${{ secrets.L_MYSQL_DB }},TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }},PROJECT_ID=${{ secrets.PROJECT_ID }},TOPIC_ID=${{ env.TOPIC_ID }}

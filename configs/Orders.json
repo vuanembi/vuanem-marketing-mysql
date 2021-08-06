@@ -1,0 +1,45 @@
+{
+    "fields": {
+        "timestamp": [
+            "created_at"
+        ]
+    },
+    "schema": [
+        {
+            "name": "id",
+            "type": "INTEGER"
+        },
+        {
+            "name": "email",
+            "type": "STRING"
+        },
+        {
+            "name": "phone_number",
+            "type": "STRING"
+        },
+        {
+            "name": "amount",
+            "type": "INTEGER"
+        },
+        {
+            "name": "real_amount",
+            "type": "INTEGER"
+        },
+        {
+            "name": "utm_campaign",
+            "type": "STRING"
+        },
+        {
+            "name": "utm_medium",
+            "type": "STRING"
+        },
+        {
+            "name": "utm_source",
+            "type": "STRING"
+        },
+        {
+            "name": "created_at",
+            "type": "TIMESTAMP"
+        }
+    ]
+}
