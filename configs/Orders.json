@@ -10,6 +10,10 @@
             "type": "INTEGER"
         },
         {
+            "name": "user_id",
+            "type": "INTEGER"
+        },
+        {
             "name": "email",
             "type": "STRING"
         },

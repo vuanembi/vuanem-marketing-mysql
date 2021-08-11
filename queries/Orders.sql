@@ -1,5 +1,6 @@
 SELECT
     id,
+    user_id,
     email,
     phone_number,
     amount,
