@@ -9,7 +9,7 @@ from libs.bigquery import load
 
 def factory(table: str) -> IMySQLTable:
     try:
-        module = importlib.import_module(f"models.models.{table}")
+        module = importlib.import_module(f"models.Ecommerce.{table}")
         return getattr(module, table)
     except (ImportError, AttributeError):
         raise ValueError(table)
