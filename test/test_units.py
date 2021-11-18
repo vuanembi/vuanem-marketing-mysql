@@ -8,7 +8,7 @@ from main import main
 @pytest.mark.parametrize(
     "table",
     [
-        "Orders",
+        # "Orders",
         "SalesCall",
     ],
 )
