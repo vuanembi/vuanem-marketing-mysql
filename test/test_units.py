@@ -1,22 +1,22 @@
-from .utils import process
+from unittest.mock import Mock
+
+import pytest
+
+from main import main
 
 
-def test_salescall():
+@pytest.mark.parametrize(
+    "table",
+    [
+        # "Orders",
+        "SalesCall",
+    ],
+)
+def test_pipelines(table):
     data = {
-        "table": "SalesCall",
+        "table": table,
     }
-    process(data)
-
-
-def test_calllogs():
-    data = {
-        "table": "CallLogs",
-    }
-    process(data)
-
-
-def test_orders():
-    data = {
-        "table": "Orders",
-    }
-    process(data)
+    res = main(Mock(get_json=Mock(return_value=data), args=data))["results"]
+    assert res["num_processed"] >= 0
+    if res["num_processed"] > 0:
+        assert res["num_processed"] == res["output_rows"]

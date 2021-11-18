@@ -1,38 +1,32 @@
 import os
 import json
-import base64
 
 import requests
+from google.cloud import bigquery
 
-from models import MySQL
-from broadcast import broadcast
+from controller.pipelines import factory, run
 
-def main(request):
-    request_json = request.get_json()
-    message = request_json["message"]
-    data_bytes = message["data"]
-    data = json.loads(base64.b64decode(data_bytes).decode("utf-8"))
+BQ_CLIENT = bigquery.Client()
+DATASET = "IP_Ecommerce"
+
+
+def main(request) -> dict:
+    data = request.get_json()
     print(data)
 
-    if "broadcast" in data:
-        results = broadcast(data)
-    elif "table" in data:
-        job = MySQL.factory(data["table"])
-        results = job.run()
-
-    responses = {
-        "pipelines": "MySQL",
-        "results": results,
-    }
-
-    print(responses)
-    requests.post(
-        "https://api.telegram.org/bot{token}/sendMessage".format(
-            token=os.getenv("TELEGRAM_TOKEN")
-        ),
-        json={
-            "chat_id": os.getenv("TELEGRAM_CHAT_ID"),
-            "text": json.dumps(responses, indent=4),
-        },
-    )
-    return responses
+    if "table" in data:
+        response = {
+            "pipelines": "EcommerceMySQL",
+            "results": run(BQ_CLIENT, factory(data["table"]), DATASET),
+        }
+        print(response)
+        requests.post(
+            f"https://api.telegram.org/bot{os.getenv('TELEGRAM_TOKEN')}/sendMessage",
+            json={
+                "chat_id": "-465061044",
+                "text": json.dumps(response, indent=4),
+            },
+        )
+        return response
+    else:
+        raise ValueError(data)

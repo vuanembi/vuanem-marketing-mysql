@@ -6,7 +6,6 @@ on:
 
 env:
   FUNCTION_NAME: vuanem_mysql
-  TOPIC_ID: vuanem_mysql
 
 jobs:
   deploy:
@@ -24,11 +23,11 @@ jobs:
       - name: Deploy to Cloud Functions
         run: >-
           gcloud functions deploy ${{ env.FUNCTION_NAME }}
-          --timeout=540
+          --timeout=530
           --memory=2048MB
           --entry-point=main
-          --runtime=python38
+          --runtime=python39
           --trigger-http
           --project=${{ secrets.PROJECT_ID }}
           --service-account=${{ secrets.GCP_SA }}
-          --set-env-vars=M_MYSQL_UID=${{ secrets.M_MYSQL_UID }},M_MYSQL_PWD=${{ secrets.M_MYSQL_PWD }},M_MYSQL_HOST=${{ secrets.M_MYSQL_HOST }},M_MYSQL_DB=${{ secrets.M_MYSQL_DB }},L_MYSQL_UID=${{ secrets.L_MYSQL_UID }},L_MYSQL_PWD="${{ secrets.L_MYSQL_PWD }}",L_MYSQL_HOST=${{ secrets.L_MYSQL_HOST }},L_MYSQL_DB=${{ secrets.L_MYSQL_DB }},TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }},TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }},PROJECT_ID=${{ secrets.PROJECT_ID }},TOPIC_ID=${{ env.TOPIC_ID }}
+          --set-env-vars=M_MYSQL_UID=${{ secrets.M_MYSQL_UID }},M_MYSQL_PWD=${{ secrets.M_MYSQL_PWD }},M_MYSQL_HOST=${{ secrets.M_MYSQL_HOST }},M_MYSQL_DB=${{ secrets.M_MYSQL_DB }},L_MYSQL_UID=${{ secrets.L_MYSQL_UID }},L_MYSQL_PWD="${{ secrets.L_MYSQL_PWD }}",L_MYSQL_HOST=${{ secrets.L_MYSQL_HOST }},L_MYSQL_DB=${{ secrets.L_MYSQL_DB }},TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
