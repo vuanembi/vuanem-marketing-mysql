@@ -23,7 +23,7 @@ def main(request) -> dict:
         requests.post(
             f"https://api.telegram.org/bot{os.getenv('TELEGRAM_TOKEN')}/sendMessage",
             json={
-                "chat_id": os.getenv("TELEGRAM_CHAT_ID"),
+                "chat_id": "-465061044",
                 "text": json.dumps(response, indent=4),
             },
         )
