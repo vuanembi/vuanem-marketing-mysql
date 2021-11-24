@@ -10,6 +10,7 @@ from main import main
     [
         # "Orders",
         "SalesCall",
+        "SalesCall2",
     ],
 )
 def test_pipelines(table):
