@@ -6,13 +6,8 @@ BQ_CLIENT = bigquery.Client()
 DATASET = "IP_Ecommerce"
 
 
-def load(
-    table: str,
-    schema: list[dict],
-):
-    def _load(
-        rows: list[dict[str, Any]],
-    ) -> int:
+def load(table: str, schema: list[dict]):
+    def _load(rows: list[dict[str, Any]]) -> int:
         return (
             BQ_CLIENT.load_table_from_json(
                 rows,

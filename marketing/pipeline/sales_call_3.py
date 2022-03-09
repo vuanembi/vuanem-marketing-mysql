@@ -1,11 +1,11 @@
-from db.mysql import get
+from db.mysql import get_ssh
 from marketing.pipeline.interface import Pipeline
-from marketing.config import laravel_db
+from marketing.config import webhook_db
 from marketing.pipeline.utils import transform_timestamp
 
-sales_call_2 = Pipeline(
-    "SalesCall2",
-    get(laravel_db),
+sales_call_3 = Pipeline(
+    "SalesCall3",
+    get_ssh(webhook_db),
     """
         SELECT
             id,
@@ -26,7 +26,7 @@ sales_call_2 = Pipeline(
             ticket_id,
             created_at,
             updated_at
-        FROM vuanem_ecommerce.salecalls
+        FROM salecalls
         """,
     lambda rows: [
         {

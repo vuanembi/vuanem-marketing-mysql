@@ -1,5 +1,5 @@
 from marketing.pipeline.interface import Pipeline
-from marketing.connection import magento_connection
+from marketing.config import magento_connection
 from marketing.pipeline.utils import transform_timestamp
 
 sales_call = Pipeline(

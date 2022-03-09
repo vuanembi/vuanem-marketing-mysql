@@ -1,5 +1,5 @@
 from marketing.pipeline.interface import Pipeline
-from marketing.connection import laravel_connection
+from marketing.config import laravel_connection
 from marketing.pipeline.utils import transform_timestamp
 
 orders = Pipeline(
