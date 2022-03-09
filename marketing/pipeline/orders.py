@@ -1,10 +1,11 @@
+from db.mysql import get
 from marketing.pipeline.interface import Pipeline
-from marketing.config import laravel_connection
+from marketing.config import laravel_db
 from marketing.pipeline.utils import transform_timestamp
 
 orders = Pipeline(
     "Orders",
-    laravel_connection,
+    get(laravel_db),
     """
         SELECT
             id,
