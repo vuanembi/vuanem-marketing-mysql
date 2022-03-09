@@ -1,10 +1,11 @@
-from models.Ecommerce.base import IMySQLTable, transform_timestamp
-from models.engine import laravel_engine
+from marketing.pipeline.interface import Pipeline
+from marketing.connection import laravel_connection
+from marketing.pipeline.utils import transform_timestamp
 
-Orders: IMySQLTable = {
-    "name": "Orders",
-    "engine": laravel_engine,
-    "query": f"""
+orders = Pipeline(
+    "Orders",
+    laravel_connection,
+    """
         SELECT
             id,
             user_id,
@@ -19,7 +20,7 @@ Orders: IMySQLTable = {
         FROM
             vuanem_ecommerce.orders
         """,
-    "transform": lambda rows: [
+    lambda rows: [
         {
             "call_id": row["call_id"],
             "customer_id": row["customer_id"],
@@ -34,7 +35,7 @@ Orders: IMySQLTable = {
         }
         for row in rows
     ],
-    "schema": [
+    [
         {"name": "call_id", "type": "STRING"},
         {"name": "customer_id", "type": "INTEGER"},
         {"name": "ticket_id", "type": "INTEGER"},
@@ -46,4 +47,4 @@ Orders: IMySQLTable = {
         {"name": "created_at", "type": "TIMESTAMP"},
         {"name": "updated_at", "type": "TIMESTAMP"},
     ],
-}
+)

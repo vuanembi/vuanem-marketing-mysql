@@ -1,10 +1,11 @@
-from models.Ecommerce.base import IMySQLTable, transform_timestamp
-from models.engine import magento_engine
+from marketing.pipeline.interface import Pipeline
+from marketing.connection import magento_connection
+from marketing.pipeline.utils import transform_timestamp
 
-SalesCall: IMySQLTable = {
-    "name": "SalesCall",
-    "engine": magento_engine,
-    "query": f"""
+sales_call = Pipeline(
+    "SalesCall",
+    magento_connection,
+    """
         SELECT
             customer_name AS name,
             customer_tel AS phone,
@@ -18,7 +19,7 @@ SalesCall: IMySQLTable = {
         FROM
             vuanem_ecommerce.vuanem_salescall_salescall
         """,
-    "transform": lambda rows: [
+    lambda rows: [
         {
             "name": row["name"],
             "phone": row["phone"],
@@ -32,7 +33,7 @@ SalesCall: IMySQLTable = {
         }
         for row in rows
     ],
-    "schema": [
+    [
         {"name": "name", "type": "STRING"},
         {"name": "phone", "type": "STRING"},
         {"name": "email", "type": "STRING"},
@@ -43,4 +44,4 @@ SalesCall: IMySQLTable = {
         {"name": "shopify_order_id", "type": "INTEGER"},
         {"name": "source", "type": "STRING"},
     ],
-}
+)
