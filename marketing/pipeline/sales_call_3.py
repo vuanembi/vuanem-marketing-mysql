@@ -1,10 +1,12 @@
-from models.Ecommerce.base import IMySQLTable, transform_timestamp
-from models.engine import laravel_engine
+from db.mysql import get_ssh
+from marketing.pipeline.interface import Pipeline
+from marketing.config import webhook_db
+from marketing.pipeline.utils import transform_timestamp
 
-SalesCall2: IMySQLTable = {
-    "name": "SalesCall2",
-    "engine": laravel_engine,
-    "query": f"""
+sales_call_3 = Pipeline(
+    "SalesCall3",
+    get_ssh(webhook_db),
+    """
         SELECT
             id,
             contact_id,
@@ -24,9 +26,9 @@ SalesCall2: IMySQLTable = {
             ticket_id,
             created_at,
             updated_at
-        FROM vuanem_ecommerce.salecalls
+        FROM salecalls
         """,
-    "transform": lambda rows: [
+    lambda rows: [
         {
             "id": row["id"],
             "contact_id": row["contact_id"],
@@ -49,7 +51,7 @@ SalesCall2: IMySQLTable = {
         }
         for row in rows
     ],
-    "schema": [
+    [
         {"name": "id", "type": "NUMERIC"},
         {"name": "contact_id", "type": "NUMERIC"},
         {"name": "customer_name", "type": "STRING"},
@@ -66,7 +68,7 @@ SalesCall2: IMySQLTable = {
         {"name": "smart_tags", "type": "STRING"},
         {"name": "ipaddress", "type": "STRING"},
         {"name": "ticket_id", "type": "NUMERIC"},
-        {"name": "created_at", "type": "TIMESTAMP"}, 
+        {"name": "created_at", "type": "TIMESTAMP"},
         {"name": "updated_at", "type": "TIMESTAMP"},
     ],
-}
+)
