@@ -38,12 +38,14 @@ jobs:
 
       - name: Create ${{ env.ENV_KEY }}
         run: |
-          echo "M_MYSQL_UID: ${{ secrets.M_MYSQL_UID }}" >> ${{ env.ENV_FILE }}
-          echo "M_MYSQL_PWD: ${{ secrets.M_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
-          echo "M_MYSQL_HOST: ${{ secrets.M_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
-          echo "L_MYSQL_UID: ${{ secrets.L_MYSQL_UID }}" >> ${{ env.ENV_FILE }}
-          echo "L_MYSQL_PWD: ${{ secrets.L_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
-          echo "L_MYSQL_HOST: ${{ secrets.L_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
+          echo "LARAVEL_USER: ${{ secrets.LARAVEL_USER }}" >> ${{ env.ENV_FILE }}
+          echo "LARAVEL_PWD: ${{ secrets.LARAVEL_PWD }}" >> ${{ env.ENV_FILE }}
+          echo "LARAVEL_HOST: ${{ secrets.LARAVEL_HOST }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_HOST: ${{ secrets.L_MYSQL_UID }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_USER: ${{ secrets.L_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_PWD: ${{ secrets.L_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_SSH_USER: ${{ secrets.L_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_SSH_PWD: ${{ secrets.L_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
 
       - name: Upload ${{ env.ENV_FILE }}
         uses: actions/upload-artifact@v2
