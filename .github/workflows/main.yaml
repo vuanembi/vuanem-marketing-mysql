@@ -41,11 +41,11 @@ jobs:
           echo "LARAVEL_USER: ${{ secrets.LARAVEL_USER }}" >> ${{ env.ENV_FILE }}
           echo "LARAVEL_PWD: ${{ secrets.LARAVEL_PWD }}" >> ${{ env.ENV_FILE }}
           echo "LARAVEL_HOST: ${{ secrets.LARAVEL_HOST }}" >> ${{ env.ENV_FILE }}
-          echo "WEBHOOK_HOST: ${{ secrets.L_MYSQL_UID }}" >> ${{ env.ENV_FILE }}
-          echo "WEBHOOK_USER: ${{ secrets.L_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
-          echo "WEBHOOK_PWD: ${{ secrets.L_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
-          echo "WEBHOOK_SSH_USER: ${{ secrets.L_MYSQL_PWD }}" >> ${{ env.ENV_FILE }}
-          echo "WEBHOOK_SSH_PWD: ${{ secrets.L_MYSQL_HOST }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_HOST: ${{ secrets.WEBHOOK_HOST }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_USER: ${{ secrets.WEBHOOK_USER }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_PWD: ${{ secrets.WEBHOOK_PWD }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_SSH_USER: ${{ secrets.WEBHOOK_SSH_USER }}" >> ${{ env.ENV_FILE }}
+          echo "WEBHOOK_SSH_PWD: ${{ secrets.WEBHOOK_SSH_PWD }}" >> ${{ env.ENV_FILE }}
 
       - name: Upload ${{ env.ENV_FILE }}
         uses: actions/upload-artifact@v2
