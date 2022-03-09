@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vuanem-marketing-mysql"
-version = "3.0"
+version = "3.1.0"
 description = ""
 authors = ["HM <hieumdd@gmail.com>"]
 
