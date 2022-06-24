@@ -5,7 +5,7 @@ import pymysql.cursors
 
 from marketing import config
 
-LOCALHOST = "localhost"
+LOCALHOST = "127.0.0.1"
 SSH_PORT = 22
 MYSQL_PORT = 3306
 
