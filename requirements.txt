@@ -16,7 +16,7 @@ grpcio-status==1.44.0; python_version >= "3.6" and python_version < "3.11"
 grpcio==1.44.0; python_version >= "3.6" and python_version < "3.11"
 idna==3.3; python_version >= "3.6" and python_full_version < "3.0.0" and python_version < "3.11" or python_version >= "3.6" and python_version < "3.11" and python_full_version >= "3.6.0"
 packaging==21.3; python_version >= "3.6" and python_version < "3.11"
-paramiko==2.9.2
+paramiko==2.9.3
 proto-plus==1.20.3; python_version >= "3.6" and python_version < "3.11"
 protobuf==3.19.4; python_version >= "3.6" and python_version < "3.11"
 pyasn1-modules==0.2.8; python_version >= "3.6" and python_full_version < "3.0.0" and python_version < "3.11" or python_version >= "3.6" and python_version < "3.11" and python_full_version >= "3.6.0"
