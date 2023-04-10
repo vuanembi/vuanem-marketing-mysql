@@ -4,7 +4,7 @@ certifi==2021.10.8; python_version >= "3.6" and python_full_version < "3.0.0" an
 cffi==1.15.0; python_version >= "3.6"
 charset-normalizer==2.0.12; python_version >= "3.6" and python_version < "3.11" and python_full_version >= "3.6.0"
 compose==1.2.8
-cryptography==36.0.1; python_version >= "3.6"
+cryptography==39.0.1; python_version >= "3.6"
 google-api-core==2.7.0; python_version >= "3.6" and python_version < "3.11"
 google-auth==2.6.0; python_version >= "3.6" and python_full_version < "3.0.0" and python_version < "3.11" or python_version >= "3.6" and python_version < "3.11" and python_full_version >= "3.6.0"
 google-cloud-bigquery==2.34.2; python_version >= "3.6" and python_version < "3.11"
