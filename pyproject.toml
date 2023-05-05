@@ -11,6 +11,7 @@ PyMySQL = "^1.0.2"
 pytz = "^2021.3"
 compose = "^1.2.8"
 sshtunnel = "^0.4.0"
+google-cloud-secret-manager = "^2.16.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -25,9 +26,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 addopts = "-s --durations=0"
-testpaths = [
-    "test",
-]
 
 [tool.mypy]
 python_version = 3.9
