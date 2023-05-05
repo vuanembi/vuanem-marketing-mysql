@@ -9,7 +9,7 @@ DATASET = "IP_Ecommerce"
 
 def load(rows: list[dict[str, Any]], table: str, schema: list[dict]) -> int:
     return (
-        BQ_CLIENT.load_table_from_json(
+        BQ_CLIENT.load_table_from_json(  # type: ignore
             rows,
             f"{DATASET}.{table}",
             job_config=bigquery.LoadJobConfig(
