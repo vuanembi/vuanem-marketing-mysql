@@ -123,3 +123,40 @@ ZNS = Pipeline(
         {"name": "updated_at", "type": "TIMESTAMP"},
     ],
 )
+
+ZNS_FOLLOW_STORE = Pipeline(
+    name="ZNSFollowStore",
+    query="""
+        select
+            id,
+            phone_no,
+            user_id,
+            username,
+            user_text,
+            voucher,
+            created_at,
+            updated_at
+        from 
+            zns
+        """,
+    transform=lambda row: {
+        "id": row["id"],
+        "phone_no": row["phone_no"],
+        "user_id": row["user_id"],
+        "username": row["username"],
+        "user_text": row["user_text"],
+        "voucher": row["voucher"],
+        "created_at": transform_timestamp(row["created_at"]),
+        "updated_at": transform_timestamp(row["updated_at"]),
+    },
+    schema=[
+        {"name": "id", "type": "NUMERIC"},
+        {"name": "phone_no", "type": "STRING"},
+        {"name": "user_id", "type": "STRING"},
+        {"name": "username", "type": "STRING"},
+        {"name": "user_text", "type": "STRING"},
+        {"name": "voucher", "type": "STRING"},
+        {"name": "created_at", "type": "TIMESTAMP"},
+        {"name": "updated_at", "type": "TIMESTAMP"},
+    ],
+)
