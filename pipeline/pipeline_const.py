@@ -129,6 +129,31 @@ ZNS_FOLLOW_STORE = Pipeline(
     query="""
         select
             id,
+            code,
+            created_at,
+            updated_at
+        from 
+            zns
+        """,
+    transform=lambda row: {
+        "id": row["id"],
+        "code": row["code"],
+        "created_at": transform_timestamp(row["created_at"]),
+        "updated_at": transform_timestamp(row["updated_at"]),
+    },
+    schema=[
+        {"name": "id", "type": "NUMERIC"},
+        {"name": "code", "type": "STRING"},
+        {"name": "created_at", "type": "TIMESTAMP"},
+        {"name": "updated_at", "type": "TIMESTAMP"},
+    ],
+)
+
+ZNS_FOLLOW = Pipeline(
+    name="ZNSFollow",
+    query="""
+        select
+            id,
             phone_no,
             user_id,
             username,
