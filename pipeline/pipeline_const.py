@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 def transform_timestamp(value: datetime) -> str:
     tz = ZoneInfo("Asia/Ho_Chi_Minh")
-    return value.replace(tzinfo=tz).isoformat(timespec="seconds")
+    return value.replace(tzinfo=tz).isoformat(timespec="seconds") if value else None
 
 
 @dataclass
@@ -133,7 +133,7 @@ ZNS_FOLLOW_STORE = Pipeline(
             created_at,
             updated_at
         from 
-            zns
+            zns_follow_stores
         """,
     transform=lambda row: {
         "id": row["id"],
@@ -162,7 +162,7 @@ ZNS_FOLLOW = Pipeline(
             created_at,
             updated_at
         from 
-            zns
+            zns_follows
         """,
     transform=lambda row: {
         "id": row["id"],
